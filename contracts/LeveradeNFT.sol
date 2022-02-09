@@ -46,6 +46,21 @@ contract LeveradeNFT is ERC721, Ownable {
     }
 
     /**
+     * @dev Returns if the `operator` is allowed to manage all of the assets of `owner`.
+     *
+     * OpenSea's proxy contract at Polygon is approved by default in order to allow NFT owners to trade their tokens
+     * at OpenSea without having to explicitly call {setApprovalForAll}, thus avoiding gas costs.
+     */
+    function isApprovedForAll(address owner, address operator) public view override returns (bool) {
+        address openSeaProxy = 0x58807baD0B376efc12F5AD86aAc70E78ed67deaE;
+        if (operator == openSeaProxy) {
+            return true;
+        }
+
+        return ERC721.isApprovedForAll(owner, operator);
+    }
+
+    /**
      * @dev Base URI to retrieve metadata for a token id.
      * @return Metadata URI for this collection
      */
