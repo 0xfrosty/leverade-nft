@@ -4,7 +4,6 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 import { ethers } from "hardhat";
-import { LeveradeNFT } from "../../../typechain/LeveradeNFT";
 
 async function main() {
   // Hardhat always runs the compile task when running scripts with its command
@@ -19,9 +18,8 @@ async function main() {
   const baseURI = "https://metadata.leverade.network/rfen/copa-reina-22/";
 
   const LeveradeNFTContractFactory = await ethers.getContractFactory("LeveradeNFT");
-  const nft: LeveradeNFT = await LeveradeNFTContractFactory.deploy(name, symbol, baseURI);
+  const nft = await LeveradeNFTContractFactory.deploy(name, symbol, baseURI);
   await nft.deployed();
-
   console.log("NFT contract deployed to:", nft.address);
 }
 
