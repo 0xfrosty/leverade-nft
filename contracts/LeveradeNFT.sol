@@ -28,6 +28,7 @@ contract LeveradeNFT is ERC721, Ownable {
      */
     constructor(string memory name, string memory symbol, string memory metadataBaseURI) ERC721(name, symbol) {
         _metadataBaseURI = metadataBaseURI;
+        _tokenIdCounter.increment();  // collection starts at token id 1
     }
 
     /**
@@ -39,7 +40,7 @@ contract LeveradeNFT is ERC721, Ownable {
      * Emit a {Transfer} event.
      */
     function safeMint(address to) public onlyOwner {
-        uint256 tokenId = _tokenIdCounter.current() + 1;
+        uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
     }

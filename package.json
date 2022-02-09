@@ -4,7 +4,13 @@
   "description": "Smart contracts for LEVERADE NFT collections",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "npx hardhat clean",
+    "compile": "npx hardhat compile",
+    "coverage": "npx --node-options=--openssl-legacy-provider hardhat coverage",
+    "deploy:local": "echo \"Run: npx hardhat run --network localhost [path/to/deploy.ts]\" && exit 0",
+    "deploy:ropsten": "echo \"Run: npx hardhat run --network ropsten [path/to/deploy.ts]\" && exit 0",
+    "local": "npx --node-options=--openssl-legacy-provider hardhat node",
+    "test": "REPORT_GAS=true npx --node-options=--openssl-legacy-provider hardhat test"
   },
   "author": "0xfrosty@protonmail.com",
   "license": "MIT",
