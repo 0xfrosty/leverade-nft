@@ -39,7 +39,7 @@ contract LeveradeNFT is ERC721, Ownable {
      * Emit a {Transfer} event.
      */
     function safeMint(address to) public onlyOwner {
-        uint256 tokenId = _tokenIdCounter.current();
+        uint256 tokenId = _tokenIdCounter.current() + 1;
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
     }
