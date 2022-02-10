@@ -15,4 +15,5 @@ task("mint", "Mint tokens from a LeveradeNFT contract")
     for (let i = 0; i < supply; i++) {
       await nft.safeMint(to);
     }
+    console.log(`${supply} tokens minted`);
   });
