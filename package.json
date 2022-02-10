@@ -11,7 +11,8 @@
     "deploy:ropsten": "echo \"Run: npx hardhat run --network ropsten [path/to/deploy.ts]\" && exit 0",
     "deploy:mumbai": "echo \"Run: npx hardhat run --network mumbai [path/to/deploy.ts]\" && exit 0",
     "local": "npx --node-options=--openssl-legacy-provider hardhat node",
-    "test": "REPORT_GAS=true npx --node-options=--openssl-legacy-provider hardhat test"
+    "test": "REPORT_GAS=true npx --node-options=--openssl-legacy-provider hardhat test",
+    "csv-to-metadata": "ts-node scripts/utils/csv-to-metadata.ts"
   },
   "author": "0xfrosty@protonmail.com",
   "license": "MIT",
