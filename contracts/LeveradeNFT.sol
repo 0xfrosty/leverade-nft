@@ -15,19 +15,26 @@ contract LeveradeNFT is ERC721, Ownable {
     using Counters for Counters.Counter;
 
     /**
+     * @dev Emitted when contract owner changes the base metadata URI
+     * @param oldURI Previous base URI
+     * @param newURI New base URI
+     */
+    event BaseTokenURIUpdated(string oldURI, string newURI);
+
+    /**
      * State vars
      */
-    string private _metadataBaseURI;
+    string private _baseTokenURI;
     Counters.Counter private _tokenIdCounter;
 
     /**
      * @dev Initialize contract
      * @param name Token name (might be empty string)
      * @param symbol Token symbol (might be empty string)
-     * @param metadataBaseURI Token symbol (might be empty string)
+     * @param baseTokenURI Base URI to retrieve token metadata
      */
-    constructor(string memory name, string memory symbol, string memory metadataBaseURI) ERC721(name, symbol) {
-        _metadataBaseURI = metadataBaseURI;
+    constructor(string memory name, string memory symbol, string memory baseTokenURI) ERC721(name, symbol) {
+        _baseTokenURI = baseTokenURI;
         _tokenIdCounter.increment();  // collection starts at token id 1
     }
 
@@ -54,18 +61,27 @@ contract LeveradeNFT is ERC721, Ownable {
     }
 
     /**
+     * @dev Update the base URI to retrieve token metadata
+     * @param baseTokenURI New base URI
+     */
+    function setBaseTokenURI(string memory baseTokenURI) public onlyOwner {
+        emit BaseTokenURIUpdated(_baseTokenURI, baseTokenURI);
+        _baseTokenURI = baseTokenURI;
+    }
+
+    /**
      * @dev Returns if the `operator` is allowed to manage all of the assets of `owner`.
      *
      * OpenSea's proxy contract at Polygon is approved by default in order to allow NFT owners to trade their tokens
      * at OpenSea without having to explicitly call {setApprovalForAll}, thus avoiding gas costs.
      */
-    function isApprovedForAll(address owner, address operator) public view override returns (bool) {
+    function isApprovedForAll(address tokenOwner, address operator) public view override returns (bool) {
         address openSeaProxy = 0x58807baD0B376efc12F5AD86aAc70E78ed67deaE;
         if (operator == openSeaProxy) {
             return true;
         }
 
-        return ERC721.isApprovedForAll(owner, operator);
+        return ERC721.isApprovedForAll(tokenOwner, operator);
     }
 
     /**
@@ -73,6 +89,6 @@ contract LeveradeNFT is ERC721, Ownable {
      * @return Metadata URI for this collection
      */
     function _baseURI() internal view override returns (string memory) {
-        return _metadataBaseURI; // "https://metadata.leverade.network/rfen/copa-reina-22/"
+        return _baseTokenURI;
     }
 }

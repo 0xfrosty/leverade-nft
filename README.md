@@ -70,6 +70,23 @@ OPTIONS:
 transfer-ownership: Transfer ownership of a LeveradeNFT contract
 ```
 
+## Update base URI
+
+```
+$ npx hardhat help set-uri
+```
+
+```
+Usage: hardhat [GLOBAL OPTIONS] set-uri --contract <STRING> --uri <STRING>
+
+OPTIONS:
+
+  --contract	LeveradeNFT contract address
+  --uri     	New base URI
+
+set-uri: Set base URI to retrieve token metadata
+```
+
 # Collections
 
 ## RFEN
