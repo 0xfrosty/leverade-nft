@@ -41,7 +41,7 @@ describe("LeveradeNFT", function () {
    * Check tokens can be properly minted
    */
   describe("Mints", function () {
-    it("owner should mint new token", async function () {
+    it("contract owner should mint new token", async function () {
       const expectedTokenId = 1;
       expect(await nft.safeMint(bob.address))
         .to.emit(nft, "Transfer")
@@ -50,7 +50,7 @@ describe("LeveradeNFT", function () {
         .to.equal(1);
     });
 
-    it("non-owner shouldn't mint new token", async function () {
+    it("non-contract-owner shouldn't mint new token", async function () {
       // not awaiting here to work around
       // https://github.com/EthWorks/Waffle/issues/95
       expect(nft.connect(bob).safeMint(bob.address))
@@ -67,10 +67,10 @@ describe("LeveradeNFT", function () {
   });
 
   /**
-   * Check owner can manage the contract
+   * Check contract owner can manage the contract
    */
-  describe("Managements", function () {
-    it("owner should set new base URI", async function () {
+  describe("Management", function () {
+    it("contract owner should set new base URI", async function () {
       const oldURI = baseURI;
       const newURI = "ipfs://hash/";
 
@@ -79,13 +79,35 @@ describe("LeveradeNFT", function () {
         .withArgs(oldURI, newURI);
     });
 
-    it("non-owner shouldn't set new base URI", async function () {
+    it("non-contract-owner shouldn't set new base URI", async function () {
       const newURI = "ipfs://hash/";
 
       // not awaiting here to work around
       // https://github.com/EthWorks/Waffle/issues/95
       expect(nft.connect(bob).setBaseTokenURI(newURI))
         .to.be.revertedWith("Ownable: caller is not the owner");
+    });
+  });
+
+  /**
+   * Check approvals
+   */
+  describe("Approvals", function () {
+    it("OpenSea proxy should be approved for all tokens of owner", async function () {
+      const proxy = "0x58807baD0B376efc12F5AD86aAc70E78ed67deaE";
+      expect(await nft.isApprovedForAll(bob.address, proxy)).to.true;
+    });
+
+    it("operator should be approved for all tokens of owner", async function () {
+      const operator = owner.address;
+      await nft.connect(bob).setApprovalForAll(operator, true);
+
+      expect(await nft.isApprovedForAll(bob.address, operator)).to.true;
+    });
+
+    it("non-operator shouldn't be approved for all tokens of owner", async function () {
+      const nonOperator = owner.address;
+      expect(await nft.isApprovedForAll(bob.address, nonOperator)).to.false;
     });
   });
 });
