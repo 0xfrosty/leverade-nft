@@ -2,6 +2,7 @@ import * as fs from "fs";
 import { join } from "path";
 import * as readline from "readline";
 import { parse } from "csv-parse";
+import * as lodash from "lodash";
 
 // TODO: Make this path configurable by the user
 const outputSubPath = join(".", "public", "rfen", "copa-reina-22");
@@ -43,15 +44,13 @@ rl.question(
         }
 
         console.log("Building metadata JSON files...");
-        // TODO: Validate that CSV has at least 2 rows
-        const headersMap = buildHeadersMap(records[0], records[1]);
-
         for (const key in records) {
           if (key === "0") continue;
           console.log(`- Generating metadata JSON file for row ${key}...`);
           const outputPath = join(outputSubPath, key);
 
-          const jsonObject = toJsonObject(records[key], headersMap);
+          const csvObject = csvToObject(records[key], records[0]);
+          const jsonObject = toJsonObject(csvObject);
           fs.writeFileSync(outputPath, JSON.stringify(jsonObject));
           console.log(`\t- Generated metadata at ${outputPath}`);
         }
@@ -60,69 +59,19 @@ rl.question(
   }
 );
 
-function buildHeadersMap(
-  headers: object,
-  firstRow: object
-): Map<string, number> {
-  const map = new Map();
-  const headerEntries = Object.entries(headers);
-  const firstRowEntries = Object.entries(firstRow);
-
-  const mapSpecific = function (columnName: string): void {
-    const nameEntry = headerEntries.find((e) => e[1] === columnName);
-    if (nameEntry !== undefined) {
-      map.set(columnName, parseInt(nameEntry[0]));
-    }
-  };
-
-  const mapTrait = function (columnName: string): void {
-    const nameEntry = firstRowEntries.find((e) => e[1] === columnName);
-    if (nameEntry !== undefined) {
-      map.set(columnName, parseInt(nameEntry[0]) + 1);
-    }
-  };
-
-  mapSpecific("name");
-  mapSpecific("description");
-  mapSpecific("image");
-  mapSpecific("animation_url");
-  mapSpecific("background_color");
-  mapSpecific("external_url");
-  mapTrait("Athlete");
-  mapTrait("Club");
-  mapTrait("Medal");
-  mapTrait("Sponsor");
-
-  return map;
-}
-
-function toJsonObject(record: object, headersMap: Map<string, number>): object {
+function csvToObject(record: object, headers: object): object {
+  const headersValues = Object.values(headers);
   const recordValues = Object.values(record);
 
-  return {
-    description: recordValues[headersMap.get("description") ?? "-1"],
-    name: recordValues[headersMap.get("name") ?? "-1"],
-    image: recordValues[headersMap.get("image") ?? "-1"],
-    animation_url: recordValues[headersMap.get("animation_url") ?? "-1"],
-    background_color: recordValues[headersMap.get("background_color") ?? "-1"],
-    external_url: recordValues[headersMap.get("external_url") ?? "-1"],
-    attributes: [
-      {
-        trait_type: "Athlete",
-        value: recordValues[headersMap.get("Athlete") ?? "-1"],
-      },
-      {
-        trait_type: "Club",
-        value: recordValues[headersMap.get("Club") ?? "-1"],
-      },
-      {
-        trait_type: "Medal",
-        value: recordValues[headersMap.get("Medal") ?? "-1"],
-      },
-      {
-        trait_type: "Sponsor",
-        value: recordValues[headersMap.get("Sponsor") ?? "-1"],
-      },
-    ],
-  };
+  const output: object = {};
+
+  headersValues.forEach((value, key) => {
+    lodash.set(output, value, recordValues[key]);
+  });
+
+  return output;
+}
+
+function toJsonObject(csvObject: object): object {
+  return csvObject;
 }
