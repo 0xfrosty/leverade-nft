@@ -1,10 +1,10 @@
 import * as fs from "fs";
 import { join } from "path";
 import * as readline from "readline";
+import { parse } from "csv-parse";
 
 // TODO: Make this path configurable by the user
-const outputSubPath = join(".", "public");
-const outputPath = join(outputSubPath, "csv-to-metadata-output.json");
+const outputSubPath = join(".", "public", "rfen", "copa-reina-22");
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -19,18 +19,45 @@ rl.question(
   function (inputPath) {
     rl.close();
 
-    console.log(`The introduced file is ${inputPath}`);
-    console.log(`The output file will be ${outputPath}`);
-
-    if (!fs.existsSync(outputSubPath)) {
-      fs.mkdirSync(outputSubPath, { recursive: true });
+    if (!fs.existsSync(inputPath)) {
+      console.error("The introduced file path does not exist. Exiting...");
+      process.exitCode = 1;
+      return;
     }
-    const jsonObject = toJsonObject();
-    fs.writeFileSync(outputPath, JSON.stringify(jsonObject));
+
+    const rawCsvInfo: string = fs.readFileSync(inputPath, "utf-8");
+    parse(
+      rawCsvInfo,
+      {
+        delimiter: ",",
+      },
+      function (err, records) {
+        if (err) {
+          console.error(err);
+          return;
+        }
+
+        console.log("Assuring output folder exists...");
+        if (!fs.existsSync(outputSubPath)) {
+          fs.mkdirSync(outputSubPath, { recursive: true });
+        }
+
+        console.log("Building metadata JSON files...");
+        for (const key in records) {
+          if (key === "0") continue;
+          console.log(`- Generating metadata JSON file for row ${key}...`);
+          const outputPath = join(outputSubPath, key);
+
+          const jsonObject = toJsonObject(records[key]);
+          fs.writeFileSync(outputPath, JSON.stringify(jsonObject));
+          console.log(`\t- Generated metadata at ${outputPath}`);
+        }
+      }
+    );
   }
 );
 
-function toJsonObject(): object {
+function toJsonObject(record: object): object {
   return {
     description:
       "Colección conmemorativa de las medallistas de la temporada 2021/2022 de la Copa de la Reina de Waterpolo de España, acuñada por la Real Federación Española de Natación.",
