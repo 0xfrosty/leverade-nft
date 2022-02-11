@@ -46,6 +46,8 @@ describe("LeveradeNFT", function () {
       expect(await nft.safeMint(bob.address))
         .to.emit(nft, "Transfer")
         .withArgs(ZERO_ADDRESS, bob.address, expectedTokenId);
+      expect(await nft.totalSupply())
+        .to.equal(1);
     });
 
     it("non-owner shouldn't mint new token", async function () {
@@ -53,6 +55,8 @@ describe("LeveradeNFT", function () {
       // https://github.com/EthWorks/Waffle/issues/95
       expect(nft.connect(bob).safeMint(bob.address))
         .to.be.revertedWith("Ownable: caller is not the owner");
+      expect(await nft.totalSupply())
+        .to.equal(0);
     });
 
     it("should get right token URI", async function () {

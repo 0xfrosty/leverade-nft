@@ -32,6 +32,14 @@ contract LeveradeNFT is ERC721, Ownable {
     }
 
     /**
+     * @dev Token supply
+     * @return Number of minted tokens
+     */
+    function totalSupply() external view returns (uint256) {
+        return _tokenIdCounter.current() - 1;
+    }
+
+    /**
      * @dev Safely mint a new token and transfer it to `to`.
      *
      * If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon
