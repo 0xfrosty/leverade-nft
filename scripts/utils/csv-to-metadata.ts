@@ -47,9 +47,8 @@ rl.question(
         for (const key in records) {
           if (key === "0") continue;
           console.log(`- Generating metadata JSON file for row ${key}...`);
-          const outputPath = join(outputSubPath, key);
-
-          const csvObject = csvToObject(records[key], records[0]);
+          const csvObject: any = csvToObject(records[key], records[0]);
+          const outputPath = join(outputSubPath, csvObject.nft_id);
           const jsonObject = toJsonObject(csvObject);
           fs.writeFileSync(outputPath, JSON.stringify(jsonObject));
           console.log(`\t- Generated metadata at ${outputPath}`);
@@ -63,7 +62,7 @@ function csvToObject(record: object, headers: object): object {
   const headersValues = Object.values(headers);
   const recordValues = Object.values(record);
 
-  const output: object = {};
+  const output: any = {};
 
   headersValues.forEach((value, key) => {
     lodash.set(output, value, recordValues[key]);
@@ -72,6 +71,12 @@ function csvToObject(record: object, headers: object): object {
   return output;
 }
 
-function toJsonObject(csvObject: object): object {
+function toJsonObject(csvObject: any): object {
+  delete csvObject.nft_id;
+  delete csvObject.profile_id;
+  delete csvObject.club_url;
+  delete csvObject.external_url;
+  delete csvObject.nft_url;
+
   return csvObject;
 }
