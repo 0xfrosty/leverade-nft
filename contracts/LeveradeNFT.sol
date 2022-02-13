@@ -1,9 +1,10 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: GPL-3.0-only
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "./NativeMetaTransaction.sol";
 
 /**
  * @title LeveradeNFT
@@ -11,7 +12,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
  * organized by a given manager with a commercial relationship with LEVERADE, usually a sports federation.
  * @custom:security-contact security@leverade.com
  */
-contract LeveradeNFT is ERC721, Ownable {
+contract LeveradeNFT is ERC721, NativeMetaTransaction, Ownable {
     using Counters for Counters.Counter;
 
     /**
@@ -29,13 +30,14 @@ contract LeveradeNFT is ERC721, Ownable {
 
     /**
      * @dev Initialize contract
-     * @param name Token name (might be empty string)
-     * @param symbol Token symbol (might be empty string)
-     * @param baseTokenURI Base URI to retrieve token metadata
+     * @param name_ Token name (might be empty string)
+     * @param symbol_ Token symbol (might be empty string)
+     * @param baseTokenURI_ Base URI to retrieve token metadata
      */
-    constructor(string memory name, string memory symbol, string memory baseTokenURI) ERC721(name, symbol) {
-        _baseTokenURI = baseTokenURI;
+    constructor(string memory name_, string memory symbol_, string memory baseTokenURI_) ERC721(name_, symbol_) {
+        _baseTokenURI = baseTokenURI_;
         _tokenIdCounter.increment();  // collection starts at token id 1
+        _initializeEIP712(name_);
     }
 
     /**
@@ -90,5 +92,28 @@ contract LeveradeNFT is ERC721, Ownable {
      */
     function _baseURI() internal view override returns (string memory) {
         return _baseTokenURI;
+    }
+
+    /**
+     * @dev Return the real sender in the context of a meta-transaction
+     */
+    function _msgSender() internal view override returns (address sender) {
+        if (msg.sender == address(this)) {
+            bytes memory array = msg.data;
+            uint256 index = msg.data.length;
+            assembly {
+                // Load the 32 bytes word from memory with the address on the lower 20 bytes, and mask those.
+                sender := and(
+                    mload(add(array, index)),
+                    0xffffffffffffffffffffffffffffffffffffffff
+                )
+            }
+
+        } else {
+            sender = payable(msg.sender);
+
+        }
+
+        return sender;
     }
 }
