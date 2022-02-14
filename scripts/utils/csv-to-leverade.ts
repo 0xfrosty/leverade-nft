@@ -80,8 +80,8 @@ function toJsonObject(csvObject: any): object {
     return o.trait_type === "Club";
   });
 
-  const typeTrait = csvObject.attributes.find(function (o: any) {
-    return o.trait_type === "Medal";
+  const awardTrait = csvObject.attributes.find(function (o: any) {
+    return o.trait_type === "Award";
   });
 
   return {
@@ -92,7 +92,7 @@ function toJsonObject(csvObject: any): object {
     image: csvObject.image,
     club: clubTrait.value,
     clubUrl: csvObject.club_url,
-    type: typeTrait.value.toLowerCase(),
+    type: awardTrait.value.toLowerCase(),
     externalUrl: csvObject.external_url,
     nftUrl: csvObject.nft_url,
   };

@@ -81,7 +81,7 @@ function toJsonObject(csvObject: any): object {
   });
 
   const awardTrait = csvObject.attributes.find(function (o: any) {
-    return o.trait_type === "Medal";
+    return o.trait_type === "Award";
   });
 
   return {
@@ -100,7 +100,7 @@ function toJsonObject(csvObject: any): object {
         value: clubTrait.value,
       },
       {
-        trait_type: "Medal",
+        trait_type: "Award",
         value: awardTrait.value,
       },
     ],
