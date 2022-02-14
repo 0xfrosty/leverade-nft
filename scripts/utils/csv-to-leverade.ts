@@ -93,7 +93,7 @@ function toJsonObject(csvObject: any): object {
     club: clubTrait.value,
     clubUrl: csvObject.club_url,
     type: awardTrait.value.toLowerCase(),
-    externalUrl: csvObject.external_url,
-    nftUrl: csvObject.nft_url,
+    competitionUrl: csvObject.competition_url,
+    openseaUrl: csvObject.opensea_url,
   };
 }
