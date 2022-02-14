@@ -72,37 +72,12 @@ function csvToObject(record: object, headers: object): object {
 }
 
 function toJsonObject(csvObject: any): object {
-  const athleteTrait = csvObject.attributes.find(function (o: any) {
-    return o.trait_type === "Athlete";
-  });
-
-  const clubTrait = csvObject.attributes.find(function (o: any) {
-    return o.trait_type === "Club";
-  });
-
-  const awardTrait = csvObject.attributes.find(function (o: any) {
-    return o.trait_type === "Award";
-  });
-
   return {
     name: csvObject.name,
     description: csvObject.description,
     image: csvObject.image,
     animation_url: csvObject.animation_url,
     background_color: csvObject.background_color,
-    attributes: [
-      {
-        trait_type: "Athlete",
-        value: athleteTrait.value,
-      },
-      {
-        trait_type: "Club",
-        value: clubTrait.value,
-      },
-      {
-        trait_type: "Award",
-        value: awardTrait.value,
-      },
-    ],
+    attributes: csvObject.attributes,
   };
 }
