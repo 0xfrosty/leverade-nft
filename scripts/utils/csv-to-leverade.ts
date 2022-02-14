@@ -92,7 +92,7 @@ function toJsonObject(csvObject: any): object {
     image: csvObject.image,
     club: clubTrait.value,
     clubUrl: csvObject.club_url,
-    type: awardTrait.value.toLowerCase(),
+    type: awardTrait.value.toLowerCase().replace(" ", "_"),
     competitionUrl: csvObject.competition_url,
     openseaUrl: csvObject.opensea_url,
   };
