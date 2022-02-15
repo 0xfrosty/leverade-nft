@@ -94,6 +94,6 @@ function toJsonObject(csvObject: any): object {
     clubUrl: csvObject.club_url,
     type: awardTrait.value.toLowerCase().replace(" ", "_"),
     competitionUrl: csvObject.competition_url,
-    openseaUrl: csvObject.opensea_url,
+    openseaUrl: `https://opensea.io/assets/matic/0xfb917e76927e2bed4361baa088c6e680e8546c4b/${csvObject.nft_id}`,
   };
 }
