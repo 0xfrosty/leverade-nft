@@ -1,6 +1,5 @@
 import { task } from "hardhat/config";
 import "@nomiclabs/hardhat-ethers";
-import { LeveradeNFT } from "../typechain/LeveradeNFT";
 
 task("set-uri", "Set base URI to retrieve token metadata")
   .addParam("contract", "LeveradeNFT contract address")
@@ -10,6 +9,6 @@ task("set-uri", "Set base URI to retrieve token metadata")
     const uri = taskArgs.uri;
 
     const LeveradeNFTContractFactory = await hre.ethers.getContractFactory("LeveradeNFT");
-    const nft = await LeveradeNFTContractFactory.attach(contract) as LeveradeNFT;
+    const nft = await LeveradeNFTContractFactory.attach(contract);
     await nft.setBaseTokenURI(uri);
   });

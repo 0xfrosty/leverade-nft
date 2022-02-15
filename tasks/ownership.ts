@@ -1,6 +1,5 @@
 import { task } from "hardhat/config";
 import "@nomiclabs/hardhat-ethers";
-import { LeveradeNFT } from "../typechain/LeveradeNFT";
 
 task("transfer-ownership", "Transfer ownership of a LeveradeNFT contract")
   .addParam("contract", "LeveradeNFT contract address")
@@ -10,6 +9,6 @@ task("transfer-ownership", "Transfer ownership of a LeveradeNFT contract")
     const to = hre.ethers.utils.getAddress(taskArgs.to);
 
     const LeveradeNFTContractFactory = await hre.ethers.getContractFactory("LeveradeNFT");
-    const nft = await LeveradeNFTContractFactory.attach(contract) as LeveradeNFT;
+    const nft = await LeveradeNFTContractFactory.attach(contract);
     await nft.transferOwnership(to);
   });
