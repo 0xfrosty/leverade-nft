@@ -13,7 +13,9 @@ task("mint", "Mint tokens from a LeveradeNFT contract")
     const LeveradeNFTContractFactory = await hre.ethers.getContractFactory("LeveradeNFT");
     const nft = await LeveradeNFTContractFactory.attach(contract);
     for (let i = 0; i < supply; i++) {
-      await nft.safeMint(to);
+      const tx = await nft.safeMint(to);
+      await tx.wait();
     }
+
     console.log(`${supply} tokens minted`);
   });

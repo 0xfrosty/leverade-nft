@@ -10,5 +10,8 @@ task("set-uri", "Set base URI to retrieve token metadata")
 
     const LeveradeNFTContractFactory = await hre.ethers.getContractFactory("LeveradeNFT");
     const nft = await LeveradeNFTContractFactory.attach(contract);
-    await nft.setBaseTokenURI(uri);
+    const tx = await nft.setBaseTokenURI(uri);
+    await tx.wait();
+
+    console.log(`Token URI updated to ${uri}`);
   });

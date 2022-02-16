@@ -10,5 +10,8 @@ task("transfer-ownership", "Transfer ownership of a LeveradeNFT contract")
 
     const LeveradeNFTContractFactory = await hre.ethers.getContractFactory("LeveradeNFT");
     const nft = await LeveradeNFTContractFactory.attach(contract);
-    await nft.transferOwnership(to);
+    const tx = await nft.transferOwnership(to);
+    await tx.wait();
+
+    console.log("Contract ownership transferred");
   });
