@@ -2,6 +2,9 @@
 
 Smart contracts and related scripts for LEVERADE NFT collections.
 
+Collections are prepared to be traded via OpenSea in Polygon without users incurring gas costs (OpenSea subsidizes the
+network fees via meta-transactions).
+
 # Usage
 
 If you're using Node 17 and face the following issue with any of the commands below:
@@ -95,9 +98,9 @@ set-uri: Set base URI to retrieve token metadata
 
 #### Contract addresses
 
-| Polygon Mumbai                             | Polygon Matic |
-|--------------------------------------------|---------------|
-| 0xF35908524C9273F9C24380D506504388B8789564 |               |
+| Polygon Mumbai                             | Polygon Mainnet                            |
+|--------------------------------------------|--------------------------------------------|
+| 0xF35908524C9273F9C24380D506504388B8789564 | 0xfb917E76927e2BED4361bAa088c6e680E8546c4B |
 
 #### Deploy
 
@@ -105,10 +108,24 @@ set-uri: Set base URI to retrieve token metadata
 npx --node-options=--openssl-legacy-provider hardhat --network mumbai deploy --name "Copa Reina Waterpolo España 2022" --symbol CRWE22 --uri https://metadata.leverade.network/rfen/copa-reina-22/
 ```
 
+```
+npx --node-options=--openssl-legacy-provider hardhat --network polygon deploy --name "Copa Reina Waterpolo 2022" --symbol CRW22 --uri https://metadata.leverade.network/rfen/copa-reina-22/
+```
+
 #### Mint
 
 ```
 npx --node-options=--openssl-legacy-provider hardhat --network mumbai mint --contract 0xF35908524C9273F9C24380D506504388B8789564 --supply 1 --to 0xfcdA1d6Bed08FCde27Ab01D25987B6521B51aAe3
+```
+
+```
+npx --node-options=--openssl-legacy-provider hardhat --network polygon mint --contract 0xfb917E76927e2BED4361bAa088c6e680E8546c4B --supply 36 --to 0x8442c26947cd918613856573eaBAEE3B2FF6c371
+```
+
+#### Verify
+
+```
+npx --node-options=--openssl-legacy-provider hardhat --network polygon verify 0xfb917E76927e2BED4361bAa088c6e680E8546c4B "Copa Reina Waterpolo 2022" "CRW22" "https://metadata.leverade.network/rfen/copa-reina-22/"
 ```
 
 #### Transfer ownership
