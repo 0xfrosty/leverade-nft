@@ -1,10 +1,142 @@
-# Advanced Sample Hardhat Project
+# LEVERADE NFT
 
-This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
+Smart contracts and related scripts for LEVERADE NFT collections.
 
-The project comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts. It also comes with a variety of other tools, preconfigured to work with the project code.
+Collections are prepared to be traded via OpenSea in Polygon without users incurring gas costs (OpenSea subsidizes the
+network fees via meta-transactions).
 
-Try running some of the following tasks:
+# Usage
+
+If you're using Node 17 and face the following issue with any of the commands below:
+
+```
+Error HH604: Error running JSON-RPC server: error:0308010C:digital envelope routines::unsupported
+```
+
+Please run Node with the option `openssl-legacy-provider`, e.g.
+
+```
+npx --node-options=--openssl-legacy-provider hardhat help
+```
+
+## Deploy collection
+
+```
+$ npx hardhat help deploy
+```
+```
+Usage: hardhat [GLOBAL OPTIONS] deploy --name <STRING> --symbol <STRING> --uri <STRING>
+
+OPTIONS:
+
+  --name        Token name
+  --symbol      Token symbol
+  --uri         Base metadata URI
+
+deploy: Deploy LeveradeNFT contract for a new collection
+```
+
+## Mint tokens
+
+```
+$ npx hardhat help mint
+```
+```
+Usage: hardhat [GLOBAL OPTIONS] mint --contract <STRING> --supply <STRING> --to <STRING>
+
+OPTIONS:
+
+  --contract    LeveradeNFT contract address
+  --supply      Number of tokens to mint
+  --to          Recipient address of minted tokens
+
+mint: Mint tokens from a LeveradeNFT contract
+```
+
+## Transfer ownership
+
+The owner of the contract can execute privileged functions on it, e.g. minting a new token. The deployer of the
+contract is initially the owner too, but ownership can be transferred using this task. Note that a marketplace like
+OpenSea uses the deployer address to determine who can edit their collection page (but collaborators can be added).
+
+```
+$ npx hardhat help transfer-ownership
+```
+```
+Usage: hardhat [GLOBAL OPTIONS] transfer-ownership --contract <STRING> --to <STRING>
+
+OPTIONS:
+
+  --contract    LeveradeNFT contract address
+  --to          New contract owner
+
+transfer-ownership: Transfer ownership of a LeveradeNFT contract
+```
+
+## Update base URI
+
+```
+$ npx hardhat help set-uri
+```
+
+```
+Usage: hardhat [GLOBAL OPTIONS] set-uri --contract <STRING> --uri <STRING>
+
+OPTIONS:
+
+  --contract	LeveradeNFT contract address
+  --uri     	New base URI
+
+set-uri: Set base URI to retrieve token metadata
+```
+
+# Collections
+
+## RFEN
+
+### Copa Reina 2022
+
+#### Contract addresses
+
+| Polygon Mumbai                             | Polygon Mainnet                            |
+|--------------------------------------------|--------------------------------------------|
+| 0xF35908524C9273F9C24380D506504388B8789564 | 0xfb917E76927e2BED4361bAa088c6e680E8546c4B |
+
+#### Deploy
+
+```
+npx --node-options=--openssl-legacy-provider hardhat --network mumbai deploy --name "Copa Reina Waterpolo España 2022" --symbol CRWE22 --uri https://metadata.leverade.network/rfen/copa-reina-22/
+```
+
+```
+npx --node-options=--openssl-legacy-provider hardhat --network polygon deploy --name "Copa Reina Waterpolo 2022" --symbol CRW22 --uri https://metadata.leverade.network/rfen/copa-reina-22/
+```
+
+#### Mint
+
+```
+npx --node-options=--openssl-legacy-provider hardhat --network mumbai mint --contract 0xF35908524C9273F9C24380D506504388B8789564 --supply 1 --to 0xfcdA1d6Bed08FCde27Ab01D25987B6521B51aAe3
+```
+
+```
+npx --node-options=--openssl-legacy-provider hardhat --network polygon mint --contract 0xfb917E76927e2BED4361bAa088c6e680E8546c4B --supply 36 --to 0x8442c26947cd918613856573eaBAEE3B2FF6c371
+```
+
+#### Verify
+
+```
+npx --node-options=--openssl-legacy-provider hardhat --network polygon verify 0xfb917E76927e2BED4361bAa088c6e680E8546c4B "Copa Reina Waterpolo 2022" "CRW22" "https://metadata.leverade.network/rfen/copa-reina-22/"
+```
+
+#### Transfer ownership
+
+```
+npx --node-options=--openssl-legacy-provider hardhat --network mumbai transfer-ownership --contract 0xF35908524C9273F9C24380D506504388B8789564 --to 0xfcdA1d6Bed08FCde27Ab01D25987B6521B51aAe3
+```
+
+# Additional tasks
+
+Try running some of the following Hardhat tasks:
 
 ```shell
 npx hardhat accounts

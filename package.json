@@ -4,13 +4,20 @@
   "description": "Smart contracts for LEVERADE NFT collections",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "npx hardhat clean",
+    "compile": "npx hardhat compile",
+    "coverage": "npx --node-options=--openssl-legacy-provider hardhat coverage",
+    "deploy:local": "echo \"Run: npx hardhat run --network localhost [path/to/deploy.ts]\" && exit 0",
+    "deploy:ropsten": "echo \"Run: npx hardhat run --network ropsten [path/to/deploy.ts]\" && exit 0",
+    "deploy:mumbai": "echo \"Run: npx hardhat run --network mumbai [path/to/deploy.ts]\" && exit 0",
+    "local": "npx --node-options=--openssl-legacy-provider hardhat node",
+    "test": "REPORT_GAS=true npx --node-options=--openssl-legacy-provider hardhat test"
   },
   "author": "0xfrosty@protonmail.com",
   "license": "MIT",
   "devDependencies": {
-    "@nomiclabs/hardhat-ethers": "^2.0.4",
-    "@nomiclabs/hardhat-etherscan": "^2.1.8",
+    "@nomiclabs/hardhat-ethers": "^2.0.5",
+    "@nomiclabs/hardhat-etherscan": "^3.0.1",
     "@nomiclabs/hardhat-waffle": "^2.0.2",
     "@typechain/ethers-v5": "^7.2.0",
     "@typechain/hardhat": "^2.3.1",
@@ -39,5 +46,8 @@
     "ts-node": "^10.5.0",
     "typechain": "^5.2.0",
     "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.4.2"
   }
 }
