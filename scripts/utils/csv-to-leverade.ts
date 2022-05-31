@@ -85,8 +85,8 @@ function toJsonObject(csvObject: any): object {
   });
 
   return {
-    id: csvObject.nft_id,
-    profileId: csvObject.profile_id,
+    id: csvObject.tokenId,
+    profileId: csvObject.profileId,
     nftName: csvObject.name,
     athleteName: athleteTrait.value,
     image: csvObject.image,
